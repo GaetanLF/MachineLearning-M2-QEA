@@ -32,7 +32,6 @@ list_files = os.listdir(file_path)
 
 training_files = [x for x in list_files if x[:5] == 'learn']
 test_files = [x for x in list_files if x[:4] == 'test']
-description_files = [x for x in list_files if x[:4] not in ('test','lear')]
 
 training_sets = {}
 for i in range(len(training_files)):
@@ -43,11 +42,6 @@ test_sets = {}
 for i in range(len(test_files)):
      test_sets.update({i:pd.read_csv(f'{file_path}{test_files[i]}')})
      
-description_sets = {}
-for i in range(len(description_files)):
-     description_sets.update({f'{description_files[i][:-4]}':
-                       pd.read_csv(f'{file_path}{description_files[i]}')})
-     
 #%% Merge all of them into df_train, df_test
      
 df_train,df_test = training_sets[3],test_sets[3]
@@ -57,6 +51,16 @@ for i in range(3):
                         how="left")
     df_test = df_test.merge(test_sets[i],on="PERSON_ID",
                         how="left")
+    
+#%% One-hot encode categorical variables
+var_list = ['Job_42','insee','SEX','IS_STUDENT','household_type',
+                'activity_type','Highest_diploma','Emp_contract',
+                'Employee_count','contract_type','work_condition',
+                'job_category','ECONOMIC_SECTOR','Work_description',
+                'Company_category','job_dep','Sports']
+
+df_train = pd.get_dummies(df_train,columns=var_list)
+df_test = pd.get_dummies(df_test,columns=var_list)
 
 #%% Save the datasets into a .sav file
 
