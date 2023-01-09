@@ -51,13 +51,20 @@ for i in range(3):
                         how="left")
     df_test = df_test.merge(test_sets[i],on="PERSON_ID",
                         how="left")
-    
-#%% One-hot encode categorical variables
+
+#%% Replace nans by "Other"
+
 var_list = ['Job_42','insee','SEX','IS_STUDENT','household_type',
                 'activity_type','Highest_diploma','Emp_contract',
                 'Employee_count','contract_type','work_condition',
                 'job_category','ECONOMIC_SECTOR','Work_description',
                 'Company_category','job_dep','Sports']
+
+for i in var_list:
+    df_train[i] = df_train[i].fillna('Other')
+    df_test[i] = df_test[i].fillna('Other')
+    
+#%% One-hot encode categorical variables
 
 df_train = pd.get_dummies(df_train,columns=var_list)
 df_test = pd.get_dummies(df_test,columns=var_list)
