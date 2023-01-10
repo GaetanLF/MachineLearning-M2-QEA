@@ -590,12 +590,12 @@ gb_cv = GridSearchCV(gb, param_grid, cv=cv_folds, n_jobs=-1)
 # Fit the grid search object to the training data
 gb_cv.fit(X, Y)
 
-predictions_gb = gb_cv.predict(dt_predict)
+predictions_gb = gb_cv.predict(df_predict)
 
 
 
 
-predictions = dt_predict['PERSON_ID']
+predictions = df_predict['PERSON_ID']
 predictions = predictions.assign(target=predictions_gb)
 
 predictions.to_csv('predictions.csv', index=False)
